@@ -8,8 +8,11 @@ public class Game {
 
     private GameOutput output = new GameOutput();
     private CommandParser commandParser = new CommandParser();
+    private Room currentRoom;
+    private int gameState = 0;
 
     public void run(){
+        printWelcome();
         while (true){
             Scanner in = new Scanner(System.in);
             String s = in.nextLine();
@@ -24,9 +27,91 @@ public class Game {
     public GameOutput getOutput(){
         return output;
     }
+    private void printWelcome() {
+        output.println("Welcome to Zork");
+        output.println("Type 'help' if you need help.");
+    }
 
     public void exit() {
-        output.println("Exit");
+        output.println("Exiting");
         System.exit(0);
     }
+
+    public void help(){
+        List<String> allCmd = CommandFactory.getAllCommands();
+        for(String cmd : allCmd){
+            output.println(cmd);
+        }
+    }
+
+    public void play(List<String> mapname) {
+        if(gameState!=0){
+            output.println("You are currently in the Game. Can't load map");
+            return;
+        }
+        if(mapname.get(0).equals("map #1")){
+            Room r1 = new Room("Entrance Hall");
+            Room r2 = new Room("Room #1");
+            r1.setExits(null,null,r2,null);
+            r2.setExits(r1,null,null,null);
+            currentRoom = r1;
+            gameState = 1;
+            output.println("Playing in "+mapname.get(0));
+            info();
+        }else{
+            output.println("Can't load map");
+        }
+    }
+    public void info() {
+        printRoom();
+    }
+
+    private void printRoom() {
+        output.println("You are in " + currentRoom.getDescription());
+        output.print("Doors: ");
+        if (currentRoom.getNorthExit() != null) {
+            output.print("north ");
+        }
+        if (currentRoom.getEastExit() != null) {
+            output.print("east ");
+        }
+        if (currentRoom.getSouthExit() != null) {
+            output.print("south ");
+        }
+        if (currentRoom.getWestExit() != null) {
+            output.print("west ");
+        }
+        output.println("");
+    }
+
+    public void go(List<String> args) {
+        if(gameState!=1){
+            output.println("You are not in Game.");
+            return;
+        }
+        String direction = args.get(0);
+        // Try to leave current room.
+        Room nextRoom = null;
+        if (direction.equals("north")) {
+            nextRoom = currentRoom.getNorthExit();
+        }
+        if (direction.equals("east")) {
+            nextRoom = currentRoom.getEastExit();
+        }
+        if (direction.equals("south")) {
+            nextRoom = currentRoom.getSouthExit();
+        }
+        if (direction.equals("west")) {
+            nextRoom = currentRoom.getWestExit();
+        }
+        if (nextRoom == null) {
+            System.out.println("Can't go");
+        }
+        else {
+            currentRoom = nextRoom;
+            info();
+        }
+    }
+
+
 }

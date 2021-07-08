@@ -1,7 +1,6 @@
 package io.muzoo.ssc.zork;
 
-import io.muzoo.ssc.zork.command.Command;
-import io.muzoo.ssc.zork.command.ExitCommand;
+import io.muzoo.ssc.zork.command.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -9,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class CommandFactory {
     private static final List<Class<? extends Command>> REGISTERED_COMMANDS = Arrays.asList(
-            ExitCommand.class
+            ExitCommand.class, HelpCommand.class, PlayCommand.class, InfoCommand.class, GoCommand.class
     );
 
     private static  final Map<String,Command> COMMAND_MAP = new HashMap<>();
