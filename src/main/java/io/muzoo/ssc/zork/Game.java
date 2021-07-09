@@ -58,6 +58,8 @@ public class Game {
             currentRoom = r1;
             gameState = 1;
             p1 = new Player("P1",20,20,5);
+            Monster m1 = new Monster("Golem",20,20,5);
+            r2.setMonster(m1);
             output.println("Playing in "+mapname.get(0));
             info();
         }else{
@@ -65,12 +67,15 @@ public class Game {
         }
     }
     public void info() {
-        output.println(p1.getPlayerInfo());
+        output.println("Player:"+ p1.getInfo());
         printRoom();
     }
 
     private void printRoom() {
         output.println("You are in " + currentRoom.getDescription());
+        if(currentRoom.getMonster()!= null){
+            output.println("Monster:"+currentRoom.getMonster().getInfo());
+        }
         output.print("Doors: ");
         if (currentRoom.getNorthExit() != null) {
             output.print("north ");
@@ -123,6 +128,31 @@ public class Game {
         }else{
             gameState = 0;
             printWelcome();
+        }
+    }
+    public void attackWith() {
+        if(gameState!=1){
+            output.println("You are not in Game.");
+            return;
+        }else{
+            if(currentRoom.getMonster()==null){
+                output.println("Can't attack.");
+            }else{
+                output.println("ATTACKING !!");
+                p1.attack(currentRoom.getMonster());
+                if(currentRoom.getMonster().getHp()<=0){
+                    p1.increaseAtk();
+                    currentRoom.setMonster(null);
+                }else{
+                    currentRoom.getMonster().attack(p1);
+                    if(p1.getHp()<=0){
+                        output.println("You lose");
+                        quit();
+                        return;
+                    }
+                }
+                info();
+            }
         }
     }
 }

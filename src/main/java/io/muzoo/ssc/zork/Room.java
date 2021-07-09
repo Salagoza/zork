@@ -6,10 +6,15 @@ public class Room {
     private Room southExit;
     private Room eastExit;
     private Room westExit;
+    private Monster mon;
 
 
     public Room(String description) {
         this.description = description;
+    }
+
+    public void setMonster(Monster mon){
+        this.mon = mon;
     }
 
     public void setExits(Room north, Room east, Room south, Room west) {
@@ -62,6 +67,7 @@ public class Room {
     public Room getWestExit(){
         return westExit;
     }
+    public Monster getMonster(){ return mon;}
 
 }
 
