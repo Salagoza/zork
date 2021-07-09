@@ -10,6 +10,7 @@ public class Game {
     private CommandParser commandParser = new CommandParser();
     private Room currentRoom;
     private int gameState = 0;
+    private Player p1;
 
     public void run(){
         printWelcome();
@@ -49,13 +50,14 @@ public class Game {
             output.println("You are currently in the Game. Can't load map");
             return;
         }
-        if(mapname.get(0).equals("map #1")){
+        if(mapname.get(0).equals("map#1")){
             Room r1 = new Room("Entrance Hall");
             Room r2 = new Room("Room #1");
             r1.setExits(null,null,r2,null);
             r2.setExits(r1,null,null,null);
             currentRoom = r1;
             gameState = 1;
+            p1 = new Player("P1",20,20,5);
             output.println("Playing in "+mapname.get(0));
             info();
         }else{
@@ -63,6 +65,7 @@ public class Game {
         }
     }
     public void info() {
+        output.println(p1.getPlayerInfo());
         printRoom();
     }
 
@@ -86,7 +89,7 @@ public class Game {
 
     public void go(List<String> args) {
         if(gameState!=1){
-            output.println("You are not in Game.");
+            output.println("You are not currently in Game.");
             return;
         }
         String direction = args.get(0);
@@ -113,5 +116,13 @@ public class Game {
         }
     }
 
-
+    public void quit() {
+        if(gameState!=1){
+            output.println("You are not currently in Game.");
+            return;
+        }else{
+            gameState = 0;
+            printWelcome();
+        }
+    }
 }
