@@ -60,6 +60,8 @@ public class Game {
             p1 = new Player("P1",20,20,5);
             Monster m1 = new Monster("Golem",20,20,5);
             r2.setMonster(m1);
+            Item i1 = new Item("Sword",2);
+            r1.setItem(i1);
             output.println("Playing in "+mapname.get(0));
             info();
         }else{
@@ -73,6 +75,9 @@ public class Game {
 
     private void printRoom() {
         output.println("You are in " + currentRoom.getDescription());
+        if(currentRoom.getItem()!= null){
+            output.println("Item:"+currentRoom.getItem().getName()+" ATK:"+currentRoom.getItem().getAtk());
+        }
         if(currentRoom.getMonster()!= null){
             output.println("Monster:"+currentRoom.getMonster().getInfo());
         }
@@ -117,6 +122,7 @@ public class Game {
         }
         else {
             currentRoom = nextRoom;
+            p1.increaseHp();
             info();
         }
     }
@@ -151,6 +157,38 @@ public class Game {
                         return;
                     }
                 }
+                info();
+            }
+        }
+    }
+
+    public void take() {
+        if(gameState!=1){
+            output.println("You are not in the Game.");
+            return;
+        }else{
+            if(currentRoom.getItem()==null || p1.getItem()!=null){
+                output.println("Can't take.");
+            }else{
+                output.println("Take item");
+                p1.setItem(currentRoom.getItem());
+                currentRoom.setItem(null);
+                info();
+            }
+        }
+    }
+
+    public void drop() {
+        if(gameState!=1){
+            output.println("You are not in the Game.");
+            return;
+        }else{
+            if(currentRoom.getItem()!=null || p1.getItem()==null){
+                output.println("Can't drop.");
+            }else{
+                output.println("Drop item");
+                currentRoom.setItem(p1.getItem());
+                p1.setItem(null);
                 info();
             }
         }

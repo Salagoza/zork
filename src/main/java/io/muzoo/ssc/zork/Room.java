@@ -7,6 +7,7 @@ public class Room {
     private Room eastExit;
     private Room westExit;
     private Monster mon;
+    private Item item;
 
 
     public Room(String description) {
@@ -15,6 +16,9 @@ public class Room {
 
     public void setMonster(Monster mon){
         this.mon = mon;
+    }
+    public void setItem(Item item) {
+        this.item = item;
     }
 
     public void setExits(Room north, Room east, Room south, Room west) {
@@ -68,6 +72,9 @@ public class Room {
         return westExit;
     }
     public Monster getMonster(){ return mon;}
+    public Item getItem(){
+        return item;
+    }
 
 }
 
