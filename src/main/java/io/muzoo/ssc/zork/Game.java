@@ -2,6 +2,7 @@ package io.muzoo.ssc.zork;
 
 import io.muzoo.ssc.zork.command.Command;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 public class Game {
@@ -9,8 +10,10 @@ public class Game {
     private GameOutput output = new GameOutput();
     private CommandParser commandParser = new CommandParser();
     private Room currentRoom;
+    private ArrayList<Room> allRooms;
     private int gameState = 0;
     private Player p1;
+
 
     public void run(){
         printWelcome();
@@ -53,6 +56,9 @@ public class Game {
         if(mapname.get(0).equals("map#1")){
             Room r1 = new Room("Entrance Hall");
             Room r2 = new Room("Room #1");
+            allRooms = new ArrayList<>();
+            allRooms.add(r1);
+            allRooms.add(r2);
             r1.setExits(null,null,r2,null);
             r2.setExits(r1,null,null,null);
             currentRoom = r1;
@@ -99,7 +105,7 @@ public class Game {
 
     public void go(List<String> args) {
         if(gameState!=1){
-            output.println("You are not currently in Game.");
+            output.println("You are not currently in the Game.");
             return;
         }
         String direction = args.get(0);
@@ -129,7 +135,7 @@ public class Game {
 
     public void quit() {
         if(gameState!=1){
-            output.println("You are not currently in Game.");
+            output.println("You are not currently in the Game.");
             return;
         }else{
             gameState = 0;
@@ -138,7 +144,7 @@ public class Game {
     }
     public void attackWith() {
         if(gameState!=1){
-            output.println("You are not in Game.");
+            output.println("You are not currently in the Game.");
             return;
         }else{
             if(currentRoom.getMonster()==null){
@@ -149,6 +155,11 @@ public class Game {
                 if(currentRoom.getMonster().getHp()<=0){
                     p1.increaseAtk();
                     currentRoom.setMonster(null);
+                    if(checkDefeatAllMonster()){
+                        output.println("You win");
+                        quit();
+                        return;
+                    }
                 }else{
                     currentRoom.getMonster().attack(p1);
                     if(p1.getHp()<=0){
@@ -162,9 +173,18 @@ public class Game {
         }
     }
 
+    private boolean checkDefeatAllMonster() {
+        for( Room room : allRooms){
+            if(room.getMonster()!= null){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void take() {
         if(gameState!=1){
-            output.println("You are not in the Game.");
+            output.println("You are not currently in the Game.");
             return;
         }else{
             if(currentRoom.getItem()==null || p1.getItem()!=null){
@@ -180,7 +200,7 @@ public class Game {
 
     public void drop() {
         if(gameState!=1){
-            output.println("You are not in the Game.");
+            output.println("You are not currently in the Game.");
             return;
         }else{
             if(currentRoom.getItem()!=null || p1.getItem()==null){

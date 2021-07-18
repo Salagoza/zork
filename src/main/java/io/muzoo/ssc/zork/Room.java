@@ -14,9 +14,7 @@ public class Room {
         this.description = description;
     }
 
-    public void setMonster(Monster mon){
-        this.mon = mon;
-    }
+    public void setMonster(Monster mon){ this.mon = mon; }
     public void setItem(Item item) {
         this.item = item;
     }
