@@ -1,0 +1,14 @@
+3
+Entrance
+library
+boss
+1,null,null,null
+null,2,0,null
+null,null,null,1
+1
+Sword,2,0
+2
+Gargoyle,10,10,5,1
+Frankenstein,40,40,5,0
+
+//north east south west
