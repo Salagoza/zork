@@ -29,7 +29,9 @@ public class Game {
             List<String> words = commandParser.parse(line);
             Command command = CommandFactory.get(words.get(0));
             if (command != null) {
+                System.out.println("++++++++++++++++++++++++");
                 command.execute(this, words.subList(1, words.size()));
+                System.out.println("++++++++++++++++++++++++");
             }
         }
     }
@@ -39,12 +41,12 @@ public class Game {
     }
 
     private void printWelcome() {
-        output.println("Welcome to Zork");
+        output.println("Welcome to Zork!!");
         output.println("Type 'help' if you need help.");
     }
 
     public void exit() {
-        output.println("Exiting");
+        output.println("Exiting..");
         System.exit(0);
     }
 
@@ -64,7 +66,7 @@ public class Game {
             output.println("You're currently in the game!!");
             return;
         }
-        output.println("Loading "+mapname.get(0));
+        output.println("Loading.."+mapname.get(0));
         try {
             File file = new File(mapname.get(0) +".txt");
             Scanner scanner = new Scanner(file);
